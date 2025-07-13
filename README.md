@@ -7,7 +7,7 @@ A FastAPI backend for managing Kisan Parivahan App (KPA) form data, specifically
 1. **Clone the repository**
    ```bash
    git clone https://github.com/simran1002/FastAPI-Dev.git
-   cd Assignment
+   cd FastAPI-Dev
    ```
 
 2. **Install dependencies**

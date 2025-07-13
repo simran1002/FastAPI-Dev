@@ -1,0 +1,682 @@
+{
+	"info": {
+		"_postman_id": "fa9564ac-c582-4640-9903-1364537a36bc",
+		"name": "Railway Forms API Collection",
+		"description": "Complete Postman collection for Railway Forms API with login, wheel specifications, and bogie checksheet endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24106690"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('auth_token', response.token);",
+									"    console.log('Login successful, token saved:', response.token);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phone_number\": \"7760873976\",\n  \"password\": \"to_share@123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Simple login endpoint that accepts any username/password and returns a dummy token"
+					},
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"phone_number\": \"7760873976\",\n  \"password\": \"to_share@123\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Sun, 13 Jul 2025 14:45:37 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "227"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Login successful.\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzYwODczOTc2IiwibmFtZSI6IlVzZXIiLCJpYXQiOjE3MzE5NzI3NzcsImV4cCI6MTczMTk3NjM3N30.dummy-signature-123\",\n    \"token_type\": \"bearer\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Authentication endpoints"
+		},
+		{
+			"name": "Railway Forms",
+			"item": [
+				{
+					"name": "Submit Wheel Specification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('wheel_form_number', response.data.formNumber);",
+									"    console.log('Wheel specification submitted:', response.data.formNumber);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZV9udW1iZXIiOiI3NzYwODczOTc2IiwiZXhwIjoxNzUyNDE2NDI5fQ.RoCzXcnKJiSUKF_aI-Q8YT2c6hYVlp43WAr__o39X3M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"formNumber\": \"WHEEL-2025-105\",\n  \"submittedBy\": \"Simran Yadav\",\n  \"submittedDate\": \"2025-07-13\",\n  \"fields\": {\n    \"treadDiameterNew\": \"915 (900-1000)\",\n    \"lastShopIssueSize\": \"837 (800-900)\",\n    \"condemningDia\": \"825 (800-900)\",\n    \"wheelGauge\": \"1600 (+2,-1)\",\n    \"variationSameAxle\": \"0.5\",\n    \"variationSameBogie\": \"5\",\n    \"variationSameCoach\": \"13\",\n    \"wheelProfile\": \"29.4 Flange Thickness\",\n    \"intermediateWWP\": \"20 TO 28\",\n    \"bearingSeatDiameter\": \"130.043 TO 130.068\",\n    \"rollerBearingOuterDia\": \"280 (+0.0/-0.035)\",\n    \"rollerBearingBoreDia\": \"130 (+0.0/-0.025)\",\n    \"rollerBearingWidth\": \"93 (+0/-0.250)\",\n    \"axleBoxHousingBoreDia\": \"280 (+0.030/+0.052)\",\n    \"wheelDiscWidth\": \"127 (+4/-0)\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/forms/wheel-specifications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"forms",
+								"wheel-specifications"
+							]
+						},
+						"description": "Submit wheel specification form with detailed technical specifications"
+					},
+					"response": [
+						{
+							"name": "Submit Wheel Specification",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"formNumber\": \"WHEEL-2025-105\",\n  \"submittedBy\": \"Simran Yadav\",\n  \"submittedDate\": \"2025-07-13\",\n  \"fields\": {\n    \"treadDiameterNew\": \"915 (900-1000)\",\n    \"lastShopIssueSize\": \"837 (800-900)\",\n    \"condemningDia\": \"825 (800-900)\",\n    \"wheelGauge\": \"1600 (+2,-1)\",\n    \"variationSameAxle\": \"0.5\",\n    \"variationSameBogie\": \"5\",\n    \"variationSameCoach\": \"13\",\n    \"wheelProfile\": \"29.4 Flange Thickness\",\n    \"intermediateWWP\": \"20 TO 28\",\n    \"bearingSeatDiameter\": \"130.043 TO 130.068\",\n    \"rollerBearingOuterDia\": \"280 (+0.0/-0.035)\",\n    \"rollerBearingBoreDia\": \"130 (+0.0/-0.025)\",\n    \"rollerBearingWidth\": \"93 (+0/-0.250)\",\n    \"axleBoxHousingBoreDia\": \"280 (+0.030/+0.052)\",\n    \"wheelDiscWidth\": \"127 (+4/-0)\"\n  }\n}"
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/forms/wheel-specifications",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"forms",
+										"wheel-specifications"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Sun, 13 Jul 2025 14:46:33 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "186"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Wheel specification submitted successfully.\",\n    \"data\": {\n        \"formNumber\": \"WHEEL-2025-105\",\n        \"submittedBy\": \"Simran Yadav\",\n        \"submittedDate\": \"2025-07-13\",\n        \"status\": \"Saved\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Submit Bogie Checksheet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('bogie_form_number', response.data.formNumber);",
+									"    console.log('Bogie checksheet submitted:', response.data.formNumber);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"formNumber\": \"BOGIE-2025-102\",\n  \"inspectionBy\": \"Mr. MP Singh\",\n  \"inspectionDate\": \"2025-07-13\",\n  \"bogieDetails\": {\n    \"bogieNo\": \"BG5678\",\n    \"makerYearBuilt\": \"RDSO/2020\",\n    \"incomingDivAndDate\": \"SR / 2025-07-10\",\n    \"deficitComponents\": \"None\",\n    \"dateOfIOH\": \"2025-07-12\"\n  },\n  \"bogieChecksheet\": {\n    \"bogieFrameCondition\": \"Good\",\n    \"bolster\": \"Good\",\n    \"bolsterSuspensionBracket\": \"Good\",\n    \"lowerSpringSeat\": \"Good\",\n    \"axleGuide\": \"Good\"\n  },\n  \"bmbcChecksheet\": {\n    \"cylinderBody\": \"GOOD\",\n    \"pistonTrunnion\": \"GOOD\",\n    \"adjustingTube\": \"GOOD\",\n    \"plungerSpring\": \"GOOD\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/forms/bogie-checksheet",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"forms",
+								"bogie-checksheet"
+							]
+						},
+						"description": "Submit bogie checksheet form with inspection details and condition assessments"
+					},
+					"response": [
+						{
+							"name": "Submit Bogie Checksheet",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"formNumber\": \"BOGIE-2025-102\",\n  \"inspectionBy\": \"Mr. MP Singh\",\n  \"inspectionDate\": \"2025-07-13\",\n  \"bogieDetails\": {\n    \"bogieNo\": \"BG5678\",\n    \"makerYearBuilt\": \"RDSO/2020\",\n    \"incomingDivAndDate\": \"SR / 2025-07-10\",\n    \"deficitComponents\": \"None\",\n    \"dateOfIOH\": \"2025-07-12\"\n  },\n  \"bogieChecksheet\": {\n    \"bogieFrameCondition\": \"Good\",\n    \"bolster\": \"Good\",\n    \"bolsterSuspensionBracket\": \"Good\",\n    \"lowerSpringSeat\": \"Good\",\n    \"axleGuide\": \"Good\"\n  },\n  \"bmbcChecksheet\": {\n    \"cylinderBody\": \"GOOD\",\n    \"pistonTrunnion\": \"GOOD\",\n    \"adjustingTube\": \"GOOD\",\n    \"plungerSpring\": \"GOOD\"\n  }\n}"
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/forms/bogie-checksheet",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"forms",
+										"bogie-checksheet"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Sun, 13 Jul 2025 14:46:22 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "185"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Bogie checksheet submitted successfully.\",\n    \"data\": {\n        \"formNumber\": \"BOGIE-2025-102\",\n        \"inspectionBy\": \"Mr. MP Singh\",\n        \"inspectionDate\": \"2025-07-13\",\n        \"status\": \"Saved\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Wheel Specifications (All)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzYwODczOTc2IiwibmFtZSI6IlVzZXIiLCJpYXQiOjE3MzE5NzI3NzcsImV4cCI6MTczMTk3NjM3N30.dummy-signature-123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/forms/wheel-specifications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"forms",
+								"wheel-specifications"
+							]
+						},
+						"description": "Get all wheel specifications without filters"
+					},
+					"response": [
+						{
+							"name": "Get Wheel Specifications (All)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/forms/wheel-specifications",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"forms",
+										"wheel-specifications"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Sun, 13 Jul 2025 20:04:54 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "1962"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Filtered wheel specification forms fetched successfully.\",\n    \"data\": [\n        {\n            \"formNumber\": \"WHEEL-2025-001\",\n            \"submittedBy\": \"user_id_123\",\n            \"submittedDate\": \"2025-07-03\",\n            \"fields\": {\n                \"treadDiameterNew\": \"915 (900-1000)\",\n                \"lastShopIssueSize\": \"837 (800-900)\",\n                \"condemningDia\": \"825 (800-900)\",\n                \"wheelGauge\": \"1600 (+2,-1)\",\n                \"variationSameAxle\": \"0.5\",\n                \"variationSameBogie\": \"5\",\n                \"variationSameCoach\": \"13\",\n                \"wheelProfile\": \"29.4 Flange Thickness\",\n                \"intermediateWWP\": \"20 TO 28\",\n                \"bearingSeatDiameter\": \"130.043 TO 130.068\",\n                \"rollerBearingOuterDia\": \"280 (+0.0/-0.035)\",\n                \"rollerBearingBoreDia\": \"130 (+0.0/-0.025)\",\n                \"rollerBearingWidth\": \"93 (+0/-0.250)\",\n                \"axleBoxHousingBoreDia\": \"280 (+0.030/+0.052)\",\n                \"wheelDiscWidth\": \"127 (+4/-0)\"\n            }\n        },\n        {\n            \"formNumber\": \"WHEEL-2025-101\",\n            \"submittedBy\": \"Simran Yadav\",\n            \"submittedDate\": \"2025-07-13\",\n            \"fields\": {\n                \"treadDiameterNew\": \"915 (900-1000)\",\n                \"lastShopIssueSize\": \"837 (800-900)\",\n                \"condemningDia\": \"825 (800-900)\",\n                \"wheelGauge\": \"1600 (+2,-1)\",\n                \"variationSameAxle\": \"0.5\",\n                \"variationSameBogie\": \"5\",\n                \"variationSameCoach\": \"13\",\n                \"wheelProfile\": \"29.4 Flange Thickness\",\n                \"intermediateWWP\": \"20 TO 28\",\n                \"bearingSeatDiameter\": \"130.043 TO 130.068\",\n                \"rollerBearingOuterDia\": \"280 (+0.0/-0.035)\",\n                \"rollerBearingBoreDia\": \"130 (+0.0/-0.025)\",\n                \"rollerBearingWidth\": \"93 (+0/-0.250)\",\n                \"axleBoxHousingBoreDia\": \"280 (+0.030/+0.052)\",\n                \"wheelDiscWidth\": \"127 (+4/-0)\"\n            }\n        },\n        {\n            \"formNumber\": \"WHEEL-2025-105\",\n            \"submittedBy\": \"Simran Yadav\",\n            \"submittedDate\": \"2025-07-13\",\n            \"fields\": {\n                \"treadDiameterNew\": \"915 (900-1000)\",\n                \"lastShopIssueSize\": \"837 (800-900)\",\n                \"condemningDia\": \"825 (800-900)\",\n                \"wheelGauge\": \"1600 (+2,-1)\",\n                \"variationSameAxle\": \"0.5\",\n                \"variationSameBogie\": \"5\",\n                \"variationSameCoach\": \"13\",\n                \"wheelProfile\": \"29.4 Flange Thickness\",\n                \"intermediateWWP\": \"20 TO 28\",\n                \"bearingSeatDiameter\": \"130.043 TO 130.068\",\n                \"rollerBearingOuterDia\": \"280 (+0.0/-0.035)\",\n                \"rollerBearingBoreDia\": \"130 (+0.0/-0.025)\",\n                \"rollerBearingWidth\": \"93 (+0/-0.250)\",\n                \"axleBoxHousingBoreDia\": \"280 (+0.030/+0.052)\",\n                \"wheelDiscWidth\": \"127 (+4/-0)\"\n            }\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Wheel Specifications (Filtered)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZV9udW1iZXIiOiI3NzYwODczOTc2IiwiZXhwIjoxNzUyNDE2NDI5fQ.RoCzXcnKJiSUKF_aI-Q8YT2c6hYVlp43WAr__o39X3M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/forms/wheel-specifications?formNumber=WHEEL-2025-101&submittedBy=Simran Yadav&submittedDate=2025-07-13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"forms",
+								"wheel-specifications"
+							],
+							"query": [
+								{
+									"key": "formNumber",
+									"value": "WHEEL-2025-101"
+								},
+								{
+									"key": "submittedBy",
+									"value": "Simran Yadav"
+								},
+								{
+									"key": "submittedDate",
+									"value": "2025-07-13"
+								}
+							]
+						},
+						"description": "Get wheel specifications with filters for form number, submitted by, and date"
+					},
+					"response": [
+						{
+							"name": "Get Wheel Specifications (Filtered)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/forms/wheel-specifications?formNumber=WHEEL-2025-101&submittedBy=Simran Yadav&submittedDate=2025-07-13",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"forms",
+										"wheel-specifications"
+									],
+									"query": [
+										{
+											"key": "formNumber",
+											"value": "WHEEL-2025-101"
+										},
+										{
+											"key": "submittedBy",
+											"value": "Simran Yadav"
+										},
+										{
+											"key": "submittedDate",
+											"value": "2025-07-13"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Sun, 13 Jul 2025 14:54:10 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "717"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Filtered wheel specification forms fetched successfully.\",\n    \"data\": [\n        {\n            \"formNumber\": \"WHEEL-2025-101\",\n            \"submittedBy\": \"Simran Yadav\",\n            \"submittedDate\": \"2025-07-13\",\n            \"fields\": {\n                \"treadDiameterNew\": \"915 (900-1000)\",\n                \"lastShopIssueSize\": \"837 (800-900)\",\n                \"condemningDia\": \"825 (800-900)\",\n                \"wheelGauge\": \"1600 (+2,-1)\",\n                \"variationSameAxle\": \"0.5\",\n                \"variationSameBogie\": \"5\",\n                \"variationSameCoach\": \"13\",\n                \"wheelProfile\": \"29.4 Flange Thickness\",\n                \"intermediateWWP\": \"20 TO 28\",\n                \"bearingSeatDiameter\": \"130.043 TO 130.068\",\n                \"rollerBearingOuterDia\": \"280 (+0.0/-0.035)\",\n                \"rollerBearingBoreDia\": \"130 (+0.0/-0.025)\",\n                \"rollerBearingWidth\": \"93 (+0/-0.250)\",\n                \"axleBoxHousingBoreDia\": \"280 (+0.030/+0.052)\",\n                \"wheelDiscWidth\": \"127 (+4/-0)\"\n            }\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"description": "Railway forms management endpoints"
+		},
+		{
+			"name": "Test Scenarios",
+			"item": [
+				{
+					"name": "Test Duplicate Form Number",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"formNumber\": \"WHEEL-2025-002\",\n  \"submittedBy\": \"user_id_789\",\n  \"submittedDate\": \"2025-07-13\",\n  \"fields\": {\n    \"treadDiameterNew\": \"920 (900-1000)\",\n    \"lastShopIssueSize\": \"840 (800-900)\",\n    \"condemningDia\": \"830 (800-900)\",\n    \"wheelGauge\": \"1600 (+2,-1)\",\n    \"variationSameAxle\": \"0.3\",\n    \"variationSameBogie\": \"4\",\n    \"variationSameCoach\": \"12\",\n    \"wheelProfile\": \"29.4 Flange Thickness\",\n    \"intermediateWWP\": \"20 TO 28\",\n    \"bearingSeatDiameter\": \"130.043 TO 130.068\",\n    \"rollerBearingOuterDia\": \"280 (+0.0/-0.035)\",\n    \"rollerBearingBoreDia\": \"130 (+0.0/-0.025)\",\n    \"rollerBearingWidth\": \"93 (+0/-0.250)\",\n    \"axleBoxHousingBoreDia\": \"280 (+0.030/+0.052)\",\n    \"wheelDiscWidth\": \"127 (+4/-0)\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/forms/wheel-specifications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"forms",
+								"wheel-specifications"
+							]
+						},
+						"description": "Test error handling for duplicate form number (should return 400 Bad Request)"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Invalid Login (Empty Credentials)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"\",\n  \"password\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Test error handling for empty credentials (should return 400 Bad Request)"
+					},
+					"response": []
+				}
+			],
+			"description": "Test scenarios for error handling and edge cases"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "wheel_form_number",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "bogie_form_number",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

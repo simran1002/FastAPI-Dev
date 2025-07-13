@@ -1,5 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from datetime import datetime, timedelta
+import secrets
+import base64
+import json
+from ..config import settings
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
@@ -20,38 +25,35 @@ class LoginResponse(BaseModel):
     response_description="Login successful with access token"
 )
 def login(data: LoginRequest):
-    """
-    Authenticate user and provide access token.
-    
-    **Demo Mode:**
-    - Accepts any valid username and password
-    - Returns a dummy token for testing purposes
-    
-    **Production Mode:**
-    - Validates credentials against database
-    - Returns JWT token with user permissions
-    
-    **Request Body:**
-    - **phone_number**: User's phone number
-    - **password**: User's login password
-    
-    **Returns:**
-    - **success**: Authentication status
-    - **message**: Status message
-    - **token**: JWT bearer token for API requests
-    - **token_type**: Token type (always "bearer")
-    
-    **Error Responses:**
-    - 400: Missing phone number or password
-    - 401: Invalid credentials
-    """
-    # For demo, accept any phone_number/password
+
     if not data.phone_number or not data.password:
         raise HTTPException(status_code=400, detail="Phone number and password required.")
-    # In real app, check credentials here
-    return LoginResponse(
-        success=True,
-        message="Login successful.",
-        token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzYwODczOTc2IiwibmFtZSI6IlVzZXIiLCJpYXQiOjE3MzE5NzI3NzcsImV4cCI6MTczMTk3NjM3N30.dummy-signature-123",
-        token_type="bearer"
-    ) 
+    
+    payload = {
+        "sub": data.phone_number,
+        "name": "User",
+        "iat": datetime.utcnow().isoformat(),
+        "exp": (datetime.utcnow() + timedelta(hours=24)).isoformat(), 
+        "jti": secrets.token_urlsafe(16)  
+    }
+    
+    try:
+
+        payload_str = json.dumps(payload)
+        payload_bytes = payload_str.encode('utf-8')
+        payload_b64 = base64.urlsafe_b64encode(payload_bytes).decode('utf-8')
+        
+    
+        signature = secrets.token_urlsafe(32)
+        
+
+        token = f"{payload_b64}.{signature}"
+        
+        return LoginResponse(
+            success=True,
+            message="Login successful.",
+            token=token,
+            token_type="bearer"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Token generation failed") 

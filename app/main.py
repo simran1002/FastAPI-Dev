@@ -11,73 +11,28 @@ from .api import auth_router, forms_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
-    # Startup
+
     async with engine.begin() as conn:
-        # Create tables if they don't exist
+        
         await conn.run_sync(Base.metadata.create_all)
     
     yield
     
-    # Shutdown
     await engine.dispose()
 
-
-# Create FastAPI application
 app = FastAPI(
-    title="KPA Form Data API",
-    description="""
-    # KPA Form Data API
-    
-    A comprehensive FastAPI backend for managing Kisan Parivahan App (KPA) form data and Railway Forms.
-    
-    ## Features
-    
-    * **Authentication** - Secure login system with JWT tokens
-    * **KPA Form Data** - Railway maintenance and inspection forms
-    * **PostgreSQL Database** - Robust data storage with async operations
-
-    
-    ## Quick Start
-    
-    1. **Health Check**: `GET /health`
-    2. **Authentication**: `POST /api/auth/login`
-    3. **Submit Forms**: Use the respective endpoints below
-    
-    ## API Categories
-    
-    * **Health & Documentation** - System status and API docs
-    * **Authentication** - User login and token management
-    * **KPA Form Data** - Railway maintenance and inspection forms
-    
-    ## Database
-    
-    This API uses PostgreSQL with async SQLAlchemy for optimal performance.
-    """,
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
-    lifespan=lifespan,
-    contact={
-        "name": "KPA API Support",
-        "email": "support@kpa-api.com",
-    },
-    license_info={
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT",
-    },
+    title="KPA Form Data API"
 )
 
-# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# Global exception handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
     return JSONResponse(
@@ -94,15 +49,7 @@ async def global_exception_handler(request, exc):
     response_description="API health status and version information"
 )
 async def health_check():
-    """
-    Health check endpoint to verify API status.
-    
-    Returns:
-        - **status**: Current health status
-        - **message**: Status message
-        - **version**: API version
-        - **database**: Database connection status
-    """
+  
     return {
         "status": "healthy",
         "message": "KPA Form Data API is running",
@@ -118,16 +65,7 @@ async def health_check():
     description="Get basic API information and available endpoints"
 )
 async def root():
-    """
-    Root endpoint providing API information and navigation.
-    
-    Returns:
-        - **message**: Welcome message
-        - **version**: API version
-        - **docs**: Link to Swagger documentation
-        - **redoc**: Link to ReDoc documentation
-        - **endpoints**: Available API categories
-    """
+   
     return {
         "message": "Welcome to KPA Form Data API",
         "version": "1.0.0",

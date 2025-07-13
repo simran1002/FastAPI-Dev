@@ -3,13 +3,9 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 
 
-# Wheel Specification Schemas
+
 class WheelSpecificationFields(BaseModel):
-    """
-    Technical specifications for railway wheel measurements.
     
-    All measurements should be provided in millimeters (mm) with tolerance ranges.
-    """
     treadDiameterNew: str = "915 (900-1000)"
     lastShopIssueSize: str = "837 (800-900)"
     condemningDia: str = "825 (800-900)"
@@ -96,7 +92,7 @@ class WheelSpecificationListResponse(BaseModel):
     data: List[Dict[str, Any]]
 
 
-# Bogie Checksheet Schemas
+
 class BogieDetails(BaseModel):
     bogieNo: str
     makerYearBuilt: str

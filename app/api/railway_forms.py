@@ -27,24 +27,7 @@ async def submit_wheel_specification(
     wheel_data: WheelSpecificationCreate,
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Submit wheel specification form for railway maintenance.
-    
-    This endpoint accepts comprehensive wheel specification data including:
-    - Tread diameter measurements
-    - Wheel gauge specifications
-    - Bearing dimensions
-    - Profile and tolerance data
-    
-    **Validation:**
-    - Form number must be unique
-    - All required fields must be provided
-    
-    **Returns:**
-    - Success status and confirmation message
-    - Form submission details
-    """
-    # Check if form number already exists
+
     existing_form = await db.execute(
         select(WheelSpecification).where(WheelSpecification.form_number == wheel_data.formNumber)
     )
@@ -54,7 +37,7 @@ async def submit_wheel_specification(
             detail="Form number already exists"
         )
     
-    # Create wheel specification record
+
     wheel_spec = WheelSpecification(
         form_number=wheel_data.formNumber,
         submitted_by=wheel_data.submittedBy,
@@ -90,25 +73,7 @@ async def get_wheel_specifications(
     submittedDate: Optional[str] = Query(None, description="Filter by submission date (YYYY-MM-DD format)"),
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Retrieve wheel specification forms with flexible filtering options.
     
-    **Filtering Options:**
-    - **formNumber**: Get specific form by its unique number
-    - **submittedBy**: Get forms submitted by a specific user
-    - **submittedDate**: Get forms submitted on a specific date
-    
-    **Usage Examples:**
-    - Get all forms: `GET /api/railway/wheel-specifications`
-    - Get specific form: `GET /api/railway/wheel-specifications?formNumber=WHEEL-2025-001`
-    - Get user's forms: `GET /api/railway/wheel-specifications?submittedBy=user123`
-    - Get date's forms: `GET /api/railway/wheel-specifications?submittedDate=2025-07-13`
-    
-    **Returns:**
-    - List of wheel specification forms
-    - Success status and count information
-    """
-    # Build query with filters
     query = select(WheelSpecification)
     
     if formNumber:
@@ -121,7 +86,6 @@ async def get_wheel_specifications(
     result = await db.execute(query)
     wheel_specs = result.scalars().all()
     
-    # Format response data
     data = []
     for spec in wheel_specs:
         data.append({
@@ -149,24 +113,7 @@ async def submit_bogie_checksheet(
     bogie_data: BogieChecksheetCreate,
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Submit bogie checksheet form for railway maintenance inspection.
-    
-    This endpoint accepts comprehensive bogie inspection data including:
-    - Bogie identification and history
-    - Frame condition assessment
-    - Suspension system evaluation
-    - Brake mechanism inspection
-    
-    **Validation:**
-    - Form number must be unique
-    - All required inspection fields must be provided
-    
-    **Returns:**
-    - Success status and confirmation message
-    - Form submission details with inspection information
-    """
-    # Check if form number already exists
+   
     existing_form = await db.execute(
         select(BogieChecksheet).where(BogieChecksheet.form_number == bogie_data.formNumber)
     )
@@ -176,7 +123,7 @@ async def submit_bogie_checksheet(
             detail="Form number already exists"
         )
     
-    # Create bogie checksheet record
+
     bogie_check = BogieChecksheet(
         form_number=bogie_data.formNumber,
         inspection_by=bogie_data.inspectionBy,
